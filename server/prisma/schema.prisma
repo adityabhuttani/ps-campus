@@ -1,0 +1,299 @@
+// Prisma schema for the Campus Hiring Tracker.
+// Postgres, e.g. a Supabase project. Two connection strings on purpose:
+//   - DATABASE_URL: pooled connection, used for all runtime queries.
+//   - DIRECT_URL: direct connection, used only by `prisma migrate`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  CAPTAIN
+  PANELIST
+  VIEWER
+}
+
+enum DriveStatus {
+  PLANNED
+  PPT_DONE
+  OA_DONE
+  PI_IN_PROGRESS
+  ROUND_TABLE
+  FINALIZED
+}
+
+enum CandidateFinalStatus {
+  TBD
+  SELECTED
+  REJECTED
+}
+
+// The firm's staff seniority ladder — distinct from the Designation model
+// below, which is the (junior-only) set candidates are hired INTO via
+// campus placement, not the full ladder existing staff sit on.
+enum StaffDesignation {
+  CONSULTANT
+  SENIOR_CONSULTANT
+  PRINCIPAL_CONSULTANT
+  SENIOR_PRINCIPAL
+  ASSOCIATE_DIRECTOR
+  MANAGING_DIRECTOR
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          UserRole
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  // The staff member's own department/seniority at the firm — the department
+  // is the same 4-department set candidates are hired into, so it reuses
+  // that table directly; the designation is a different, wider ladder (see
+  // StaffDesignation) so it doesn't reuse the campus-hire Designation model.
+  department    Department?       @relation(fields: [departmentId], references: [id])
+  departmentId  String?
+  designation   StaffDesignation?
+
+  teamsCaptained      Team[]           @relation("TeamCaptain")
+  teamsShadowed       Team[]           @relation("TeamShadow")
+  teamMemberships     TeamMember[]
+  interviewScores     InterviewScore[]
+  finalizedStatuses   CandidateStatus[] @relation("FinalizedBy")
+  assignedCandidates  Candidate[]      @relation("AssignedPanelist")
+}
+
+model HiringCycle {
+  id        String   @id @default(cuid())
+  name      String   @unique // e.g. "2026-27"
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  targets Team[]
+  drives  Drive[]
+  hiringTargets HiringTarget[]
+}
+
+model Department {
+  id   String @id @default(cuid())
+  name String @unique // Business Advisory, AI & Data Analytics, CFO Services, Operations
+
+  hiringTargets HiringTarget[]
+  drives        Drive[]
+  staff         User[]
+}
+
+model Designation {
+  id        String @id @default(cuid())
+  name      String @unique // BA, SBA, Consultant, SC
+  // The seniority-ladder display order (BA, SBA, Consultant, SC) — not
+  // alphabetical, so it's an explicit field rather than sorting by name.
+  sortOrder Int    @default(0)
+
+  hiringTargets   HiringTarget[]
+  drives          Drive[]
+  // One evaluation-criteria rubric per designation — not a library of
+  // interchangeable named templates, so this is a true 1:1, not a list.
+  scoringTemplate ScoringTemplate?
+}
+
+model HiringTarget {
+  id            String      @id @default(cuid())
+  cycle         HiringCycle @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  cycleId       String
+  department    Department  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  departmentId  String
+  designation   Designation @relation(fields: [designationId], references: [id], onDelete: Cascade)
+  designationId String
+  targetCount   Int
+
+  @@unique([cycleId, departmentId, designationId])
+}
+
+model ScoringTemplate {
+  id            String      @id @default(cuid())
+  name          String
+  designation   Designation @relation(fields: [designationId], references: [id], onDelete: Cascade)
+  designationId String      @unique
+  createdAt     DateTime    @default(now())
+
+  criteria ScoringCriterion[]
+}
+
+model ScoringCriterion {
+  id         String          @id @default(cuid())
+  template   ScoringTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  templateId String
+  label      String
+  weight     Float // fraction, e.g. 0.2 for 20%
+  sortOrder  Int             @default(0)
+
+  interviewScores InterviewScore[]
+
+  @@unique([templateId, label])
+}
+
+model Team {
+  id            String      @id @default(cuid())
+  cycle         HiringCycle @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  cycleId       String
+  name          String
+  captain       User        @relation("TeamCaptain", fields: [captainId], references: [id])
+  captainId     String
+  shadowPanelist   User?    @relation("TeamShadow", fields: [shadowPanelistId], references: [id])
+  shadowPanelistId String?
+
+  // Purely an organizational flag for the Teams page — draft panels are
+  // still being assembled (captain/members can change freely); marking one
+  // complete just promotes it into the finished-panels view.
+  isComplete Boolean @default(false)
+
+  // Total headcount including the captain (3, 4, or 5) — caps how many
+  // panelists can be added and gates when a panel can be submitted.
+  size Int @default(4)
+
+  members TeamMember[]
+  drives  Drive[]
+
+  @@unique([cycleId, name])
+}
+
+model TeamMember {
+  id     String @id @default(cuid())
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@unique([teamId, userId])
+}
+
+model College {
+  id   String @id @default(cuid())
+  name String @unique
+
+  drives Drive[]
+}
+
+model Drive {
+  id                String       @id @default(cuid())
+  cycle             HiringCycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  cycleId           String
+  college           College      @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  collegeId         String
+  department        Department   @relation(fields: [departmentId], references: [id])
+  departmentId      String
+  designation       Designation  @relation(fields: [designationId], references: [id])
+  designationId     String
+  team              Team         @relation(fields: [teamId], references: [id])
+  teamId            String
+
+  pptAt      DateTime?
+  oaAt       DateTime?
+  piAt       DateTime?
+  targetCount Int?
+
+  // Funnel stats for reporting. The app has no visibility into the applicant
+  // pool or the Round 1 process (both happen outside this tool), so these
+  // two are manually entered. Round 2 count and Selections count are NOT
+  // stored — they're computed from actual candidate records so they can
+  // never drift from what's really in the system (same reasoning as
+  // displayStatus below).
+  applicantCount Int?
+  round1Count    Int?
+
+  status DriveStatus @default(PLANNED)
+
+  candidates Candidate[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([cycleId, collegeId, designationId])
+}
+
+// Only candidates who have already cleared Round 1 and are qualified for the
+// PI round are ever entered here — this tool doesn't track the applicant
+// pool or the Round 1 process itself (see Drive.applicantCount/round1Count).
+model Candidate {
+  id         String  @id @default(cuid())
+  drive      Drive   @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  driveId    String
+  rollNumber String
+  name       String
+  gender     String?
+  course     String?
+  cgpa       Float?
+  oaScore    Float?
+
+  // Uploaded by the admin per-candidate (can't ride along in a bulk CSV row)
+  // — stored as a path under the server's local uploads directory.
+  cvUrl               String?
+  assessmentReportUrl String?
+
+  // Filled in by the assigned panelist during/after the interview, alongside
+  // their scores — these come up in interview conversation, not from a CV.
+  hometown             String?
+  parentsOccupation    String?
+  higherEducationPlans String?
+  holdingOffer         String?
+
+  // Each candidate is interviewed by exactly one panelist from the drive's
+  // team, not the whole panel jointly — set by the captain/admin before or
+  // during the PI round.
+  assignedPanelist   User?   @relation("AssignedPanelist", fields: [assignedPanelistId], references: [id])
+  assignedPanelistId String?
+
+  interviewScores  InterviewScore[]
+  status           CandidateStatus?
+
+  createdAt DateTime @default(now())
+
+  @@unique([driveId, rollNumber])
+}
+
+model InterviewScore {
+  id          String           @id @default(cuid())
+  candidate   Candidate        @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId String
+  panelist    User             @relation(fields: [panelistId], references: [id])
+  panelistId  String
+  criterion   ScoringCriterion @relation(fields: [criterionId], references: [id])
+  criterionId String
+  score       Float // 1-5, decimals allowed
+  remarks     String?
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([candidateId, panelistId, criterionId])
+}
+
+model CandidateStatus {
+  id               String               @id @default(cuid())
+  candidate        Candidate            @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId      String               @unique
+  status           CandidateFinalStatus @default(TBD)
+  roundTableNotes  String?
+  finalizedBy      User?                @relation("FinalizedBy", fields: [finalizedById], references: [id])
+  finalizedById    String?
+  finalizedAt      DateTime?
+
+  // Set when the assigned panelist explicitly submits their completed
+  // evaluation (all criteria scored + a final call made). Scores and remarks
+  // autosave continuously, so this is NOT what persists the work — it's the
+  // panelist declaring they're done, which is what tells a captain the
+  // evaluation can be relied on rather than still being mid-interview.
+  submittedAt      DateTime?
+
+  updatedAt        DateTime             @updatedAt
+}

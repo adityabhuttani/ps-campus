@@ -1,0 +1,1705 @@
+/* ============================================================
+   Design tokens — Preferred Square brand
+   Source: "AI Adoption KRA Framework" deck (logo + slide palette)
+   ============================================================ */
+:root {
+  /* Brand */
+  --ps-teal-900: #123840;
+  --ps-teal-800: #1b5e6f;
+  --ps-teal-700: #226f82;
+  --ps-teal-600: #2e8295;
+  --ps-mint-500: #58c1b3;
+  --ps-mint-100: #eaf3f4;
+  --ps-magenta-600: #d81b60;
+  --ps-magenta-50: #fdeef3;
+
+  /* Neutrals */
+  --ink-900: #1a202c;
+  --ink-800: #2d3748;
+  --ink-600: #4a5568;
+  --ink-500: #718096;
+  --ink-300: #cbd5da;
+  --ink-200: #dce4e7;
+  --ink-100: #eaf1f2;
+  --ink-50: #f3f7f8;
+  --white: #ffffff;
+
+  /* Semantic */
+  --bg-page: var(--ink-50);
+  --bg-surface: var(--white);
+  --bg-sunken: var(--ink-100);
+  --border-subtle: var(--ink-200);
+  --border-strong: var(--ink-300);
+  --text-heading: var(--ink-900);
+  --text-body: var(--ink-600);
+  --text-muted: var(--ink-500);
+  --text-on-brand: var(--white);
+
+  --accent-primary: var(--ps-teal-800);
+  --accent-primary-hover: var(--ps-teal-900);
+  --accent-secondary: var(--ps-mint-500);
+  --accent-critical: var(--ps-magenta-600);
+  --success-text: #1b7a5e;
+  --success-bg: #e5f5ef;
+  --danger-text: #b4243c;
+  --danger-bg: var(--ps-magenta-50);
+  --pending-text: #92600a;
+  --pending-bg: #fdf3e3;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-size-base: 14.5px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(20, 40, 45, 0.06);
+  --shadow-md: 0 6px 20px -4px rgba(20, 40, 45, 0.12), 0 2px 6px rgba(20, 40, 45, 0.06);
+  --shadow-lg: 0 20px 48px -12px rgba(18, 56, 64, 0.28);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --sidebar-w: 200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-heading);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+}
+
+h1 {
+  font-size: 1.55rem;
+}
+
+h3 {
+  font-size: 1.02rem;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Eyebrow / kicker label — echoes the deck's "PILLAR 1" tracked-caps motif */
+.eyebrow {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ps-teal-700);
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-header .eyebrow {
+  margin-bottom: 0.3rem;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+}
+
+/* ============================================================
+   App shell — sidebar layout
+   ============================================================ */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: linear-gradient(190deg, var(--ps-teal-900) 0%, var(--ps-teal-800) 100%);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.app-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem 1.35rem 1.25rem;
+}
+
+.app-sidebar-brand img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.app-sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.app-sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.app-sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+}
+
+.app-sidebar-nav a.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.nav-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.app-sidebar-footer {
+  padding: 1rem 1.25rem 1.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app-user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.app-user-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-user-name {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-user-role {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: capitalize;
+}
+
+.app-logout-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+}
+
+.app-logout-btn:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: 2.25rem 2.75rem;
+  max-width: 1320px;
+}
+
+.page-loading {
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn-primary,
+.btn-select,
+.btn-reject {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.1rem;
+  font: inherit;
+  font-size: 0.87rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--white);
+  background: var(--accent-primary);
+  transition: background 0.12s ease, transform 0.05s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-primary-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  background: var(--ink-300);
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+/* Bordered, filled-on-hover — for compact per-row actions inside a table,
+   where a solid .btn-primary would be too heavy repeated on every row. */
+.btn-outline {
+  flex: 1;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.5rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-800);
+  background: var(--white);
+  white-space: nowrap;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--ps-teal-700);
+  color: var(--ps-teal-800);
+  background: var(--ps-mint-100);
+}
+
+.btn-select {
+  background: var(--success-text);
+  margin-right: 0.5rem;
+}
+
+.btn-select:hover {
+  background: #145c46;
+}
+
+.btn-reject {
+  background: var(--accent-critical);
+}
+
+.btn-reject:hover {
+  background: #b3164f;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+
+.btn-link-block {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* A react-router <Link> that should read as a button. Can't reuse
+   .btn-outline: that class carries `flex: 1` for equal-width table row
+   actions, which stretches oddly on a standalone navigation link. */
+.btn-nav {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-800);
+  background: var(--white);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.btn-nav:hover {
+  border-color: var(--ps-teal-700);
+  color: var(--ps-teal-800);
+  background: var(--ps-mint-100);
+  text-decoration: none;
+}
+
+.btn-nav-block {
+  display: block;
+  width: 100%;
+}
+
+/* ============================================================
+   Forms
+   ============================================================ */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-800);
+  margin-bottom: 0.85rem;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text-heading);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--ps-teal-600);
+  box-shadow: 0 0 0 3px rgba(46, 130, 149, 0.15);
+}
+
+textarea {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  font-weight: 400;
+}
+
+.error-text {
+  color: var(--danger-text);
+  font-size: 0.85rem;
+}
+
+.notice-text {
+  color: var(--success-text);
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   Cards / surfaces
+   ============================================================ */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-grid .card {
+  margin-bottom: 0;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.card-grid .card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   Evaluation criteria — one editable rubric card per designation
+   ============================================================ */
+/* Fixed 2 columns rather than the generic card-grid's auto-fill — with
+   exactly 4 designations, auto-fill fits 3 per row at typical widths and
+   strands the 4th card under column 1 instead of under its neighbor. */
+.criteria-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.criteria-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.criteria-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.criteria-card-header h3 {
+  margin: 0;
+}
+
+.criteria-total {
+  flex-shrink: 0;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.criteria-total-ok {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.criteria-total-warn {
+  background: var(--pending-bg);
+  color: var(--pending-text);
+}
+
+.criteria-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0;
+}
+
+.criteria-label-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.criteria-weight-input {
+  width: 56px;
+  text-align: right;
+}
+
+.criteria-weight-suffix {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.criteria-card .btn-link {
+  margin: 0.4rem 0 0.6rem;
+  font-size: 0.82rem;
+  align-self: flex-start;
+}
+
+.criteria-card .panel-card-footer {
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+.tab-bar {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.12s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-heading);
+}
+
+.tab-btn.active {
+  color: var(--ps-teal-800);
+  border-bottom-color: var(--ps-teal-800);
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+}
+
+.data-table thead th {
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-strong);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 0.5rem 0.65rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--ink-800);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.data-table td.wrap {
+  white-space: normal;
+}
+
+.data-table tbody tr:hover td {
+  background: var(--ink-50);
+}
+
+/* Form controls embedded in a table cell must match the cell's own text
+   size exactly (font-size: inherit, not a fresh rem calc) and stay compact
+   — otherwise a <select>'s native padding/chrome reads as oversized next to
+   plain cell text and forces the row (and the whole table) wider than its
+   card. */
+.data-table select,
+.data-table input {
+  font-size: inherit;
+  padding: 0.3rem 0.45rem;
+  width: auto;
+  max-width: 140px;
+}
+
+.data-table select {
+  text-overflow: ellipsis;
+}
+
+.data-table .truncate {
+  display: block;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* The "add new X" row appended to the bottom of a table — same columns as
+   the data rows above it, so its inputs/selects line up exactly. */
+.new-row td {
+  background: var(--ink-50);
+  white-space: normal;
+}
+
+.new-row select,
+.new-row input {
+  max-width: none;
+  width: 100%;
+  min-width: 90px;
+}
+
+.plain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.plain-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+}
+
+.editable-row-name {
+  cursor: pointer;
+  border-bottom: 1px dashed transparent;
+}
+
+.editable-row-name:hover {
+  border-bottom-color: var(--border-strong);
+}
+
+.editable-row-input {
+  flex: 1;
+  font-size: inherit;
+  padding: 0.2rem 0.4rem;
+}
+
+/* ============================================================
+   Inline forms
+   ============================================================ */
+.inline-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 0.55rem;
+  align-items: end;
+  padding-top: 1rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.inline-form label {
+  margin-bottom: 0;
+}
+
+.inline-form input,
+.inline-form select {
+  width: 100%;
+  min-width: 0;
+}
+
+.inline-form .btn-primary {
+  white-space: nowrap;
+}
+
+.inline-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.file-input-label {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* CV / Assessment Report cell in the Candidates table — a "View" link (only
+   once something's uploaded) plus a compact file input to upload/replace. */
+.file-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+}
+
+.file-cell input[type="file"] {
+  font-size: 0.72rem;
+  padding: 0;
+  border: none;
+  max-width: 130px;
+}
+
+.target-input {
+  width: 70px;
+}
+
+/* A changed-but-not-yet-saved target cell — same warning tone as the
+   Evaluation Criteria total pill, so "unsaved" reads consistently. */
+.target-input-dirty {
+  border-color: var(--pending-text);
+  background: var(--pending-bg);
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.5rem;
+  margin: 0.85rem 0;
+}
+
+.checkbox-item {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-body);
+}
+
+.checkbox-item input {
+  accent-color: var(--accent-primary);
+}
+
+/* ============================================================
+   Detail grid (drive overview)
+   ============================================================ */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  row-gap: 0.7rem;
+  margin-bottom: 1.25rem;
+}
+
+.detail-grid dt {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.detail-grid dd {
+  margin: 0;
+  color: var(--ink-800);
+}
+
+.candidate-profile-grid {
+  grid-template-columns: 190px 1fr;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
+   Status pills / badges
+   ============================================================ */
+.status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--pending-bg);
+  color: var(--pending-text);
+}
+
+.status-finalized {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.cell-done {
+  background: var(--success-bg);
+  color: var(--success-text);
+  text-align: center;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+}
+
+.cell-partial {
+  background: var(--pending-bg);
+  color: var(--pending-text);
+  text-align: center;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.cell-pending {
+  text-align: center;
+  color: var(--ink-300);
+}
+
+/* ============================================================
+   Round table
+   ============================================================ */
+.round-table-row {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 1.25rem 0;
+}
+
+.round-table-row:last-child {
+  border-bottom: none;
+}
+
+.round-table-name {
+  margin-bottom: 0.65rem;
+  font-size: 0.95rem;
+}
+
+.round-table-actions {
+  margin-top: 0.75rem;
+}
+
+.round-table-summary-row {
+  cursor: pointer;
+}
+
+.round-table-summary-row:hover td {
+  background: var(--ink-50);
+}
+
+.remarks-cell {
+  max-width: 320px;
+  font-size: 0.82rem;
+  white-space: normal;
+}
+
+.remarks-cell > div {
+  margin-bottom: 0.25rem;
+}
+
+.remarks-cell > div:last-child {
+  margin-bottom: 0;
+}
+
+.round-table-detail-cell {
+  background: var(--bg-sunken);
+  padding: 1rem 1.25rem !important;
+}
+
+.round-table-detail-cell .data-table {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   Scoring page
+   ============================================================ */
+.scoring-layout {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.scoring-sidebar {
+  width: 270px;
+  flex-shrink: 0;
+}
+
+.scoring-sidebar h2 {
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+/* Drive switcher + summary link, ruled off from the candidate queue below so
+   the button doesn't read as the first row of the list. */
+.sidebar-actions {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-actions label {
+  margin-bottom: 0.6rem;
+}
+
+.scoring-sidebar .section-heading {
+  margin: 1rem 0 0.6rem;
+}
+
+.candidate-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.candidate-list-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.45rem;
+  background: var(--bg-surface);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.87rem;
+  color: var(--ink-800);
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.candidate-list-item:hover {
+  border-color: var(--ink-300);
+}
+
+.candidate-list-item.active {
+  border-color: var(--ps-teal-700);
+  background: var(--ps-mint-100);
+  font-weight: 600;
+}
+
+.badge-done {
+  color: var(--success-text);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.badge-pending {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.scoring-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.criterion-block {
+  margin-bottom: 1.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.criterion-block:last-child {
+  border-bottom: none;
+}
+
+.criterion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.criterion-header label {
+  margin: 0;
+  color: var(--text-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.saved-indicator {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--success-text);
+}
+
+.score-input {
+  width: 70px;
+  margin: 0.5rem 0;
+}
+
+.criterion-weight {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.final-call-block {
+  border-bottom: none;
+}
+
+.final-status-label {
+  margin-top: 0.6rem;
+}
+
+.final-status-label select {
+  width: 200px;
+}
+
+/* Live weighted average, pinned beside the candidate's name so the panelist
+   can see where the evaluation is landing while they score it. */
+.scoring-candidate-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.scoring-candidate-header h2 {
+  margin: 0;
+}
+
+.final-score-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--ink-50);
+  border: 1px solid var(--border-subtle);
+}
+
+.final-score-complete {
+  background: var(--success-bg);
+  border-color: var(--success-text);
+}
+
+.final-score-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.final-score-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 1.15;
+}
+
+.final-score-sub {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.submit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.summary-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.summary-toolbar label {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   My Drives — panelist's drive cards
+   ============================================================ */
+.drive-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.1rem;
+}
+
+.drive-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.drive-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.drive-card-head h3 {
+  margin: 0 0 0.15rem;
+  font-size: 1.05rem;
+}
+
+.drive-card-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.drive-card-meta {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  row-gap: 0.45rem;
+  margin: 0.9rem 0 0;
+}
+
+.drive-card-meta dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  align-self: center;
+}
+
+.drive-card-meta dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-800);
+}
+
+.drive-card-concluded {
+  background: var(--ink-50);
+}
+
+.drive-card-note {
+  margin: 0.9rem 0 0;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--pending-bg);
+  color: var(--pending-text);
+  font-size: 0.8rem;
+}
+
+/* Pinned to the bottom so buttons line up across cards of differing height. */
+.drive-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+
+.drive-card-actions .btn-nav {
+  flex: 1;
+}
+
+.btn-nav-primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--white);
+}
+
+.btn-nav-primary:hover {
+  background: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  color: var(--white);
+}
+
+/* Read-only notice at the top of a concluded drive's scoring sheet. */
+.lock-banner {
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--pending-bg);
+  color: var(--pending-text);
+  font-size: 0.85rem;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: var(--ink-50);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Headline counts on the panelist's personal summary. */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.9rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 1.1;
+}
+
+.stat-value-good {
+  color: var(--success-text);
+}
+
+.stat-value-bad {
+  color: var(--danger-text);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Teams — panel building board
+   ============================================================ */
+.teams-board {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+
+.roster-panel {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 1rem;
+}
+
+.roster-panel h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.roster-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 72vh;
+  overflow-y: auto;
+}
+
+.roster-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.roster-chip:hover {
+  border-color: var(--ps-teal-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.roster-chip-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.roster-chip-name {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--ink-800);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roster-chip-role {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.avatar-chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.avatar-captain {
+  background: var(--ps-teal-800);
+  color: var(--white);
+}
+
+.avatar-member {
+  background: var(--ps-mint-100);
+  color: var(--ps-teal-800);
+}
+
+.panels-grid {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.completed-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.panel-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.panel-card-draft {
+  background: var(--ink-50);
+  border-style: dashed;
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+
+.panel-name-input {
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  padding: 0 0 0.15rem;
+  margin: -0.1rem 0 0.1rem;
+  border-radius: 0;
+}
+
+.panel-name-input:focus {
+  outline: none;
+  border-bottom-color: var(--ps-teal-600);
+  box-shadow: none;
+}
+
+.panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0;
+}
+
+.panel-field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.panel-field select {
+  width: 100%;
+}
+
+.panel-delete {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+}
+
+.add-panel-card {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.add-panel-card:hover {
+  border-color: var(--ps-teal-700);
+  color: var(--ps-teal-800);
+}
+
+.section-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 1.5rem 0 0.75rem;
+}
+
+/* Completed panel — a finished roster, shown read-only above the still-
+   building cards. Distinguished by a checkmark eyebrow and a subtle tint
+   rather than a border stripe or accent bar. */
+.panel-card-complete {
+  background: var(--ps-mint-100);
+  border-color: var(--ps-teal-700);
+}
+
+.panel-card-complete .eyebrow::before {
+  content: "✓ ";
+}
+
+.panel-title {
+  font-size: 1.05rem;
+  margin: -0.1rem 0 0.3rem;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+}
+
+.summary-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-800);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-sub {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* A compact badge, not bare colored text — so it reads as an attached
+   label next to the name rather than a stray word out at the card edge. */
+.summary-tag {
+  flex-shrink: 0;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--ps-teal-800);
+  color: var(--white);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel-card-footer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.panel-card-footer .btn-outline,
+.panel-card-footer .btn-primary {
+  flex: 0 0 auto;
+}
+
+/* An already-assigned panelist within a still-building panel card. */
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+}
+
+.person-row-name {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--ink-800);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chip-remove {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.2rem;
+}
+
+.chip-remove:hover {
+  color: var(--danger-text);
+}
+
+/* ============================================================
+   Login page
+   ============================================================ */
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.login-brand-pane {
+  flex: 1.05;
+  position: relative;
+  background-color: var(--ps-teal-900);
+  background-image: url("/brand/login-cover.jpg");
+  background-size: cover;
+  background-position: left center;
+  color: var(--white);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 3.5rem;
+}
+
+.login-brand-pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    195deg,
+    rgba(18, 56, 64, 0.55) 0%,
+    rgba(18, 56, 64, 0.35) 38%,
+    rgba(18, 56, 64, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.login-brand-pane > * {
+  position: relative;
+  z-index: 1;
+}
+
+.login-brand-logo img {
+  height: 26px;
+  width: auto;
+}
+
+.login-brand-copy {
+  max-width: 460px;
+}
+
+.login-brand-copy .eyebrow {
+  color: var(--ps-mint-500);
+}
+
+.login-brand-copy h1 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--white);
+  font-size: 2.5rem;
+  line-height: 1.18;
+  letter-spacing: 0;
+  margin: 0.6rem 0 1rem;
+}
+
+.login-brand-copy p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.login-brand-footer {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.login-form-pane {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  padding: 2rem;
+}
+
+.login-form-card {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-form-card .eyebrow {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.login-form-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.login-form-card .login-subtitle {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0 0 2rem;
+}
+
+.login-form-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-card .btn-primary {
+  width: 100%;
+  padding: 0.72rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.login-footnote {
+  margin-top: 2rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .login-brand-pane {
+    display: none;
+  }
+}
