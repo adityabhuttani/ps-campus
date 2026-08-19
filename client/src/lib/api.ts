@@ -1,4 +1,8 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
+// A production build is served from the same origin as the API (see
+// server/src/app.ts), so same-origin (empty string) is the right default
+// there with no env var needed. Local dev runs two separate servers, so it
+// still needs an explicit host. VITE_API_URL can override either case.
+const API_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? "" : "http://localhost:4000");
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {

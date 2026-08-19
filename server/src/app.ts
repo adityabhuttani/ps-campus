@@ -4,6 +4,8 @@
 // handling for this, unlike Express 5).
 import "express-async-errors";
 
+import path from "path";
+import fs from "fs";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -24,6 +26,11 @@ export function createApp() {
   const app = express();
   const clientOrigin = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
 
+  // Render (and most hosts) terminate TLS at a proxy in front of this
+  // process, which otherwise sees plain HTTP — without this, Express has no
+  // way to know the original request was actually HTTPS.
+  app.set("trust proxy", 1);
+
   app.use(cors({ origin: clientOrigin, credentials: true }));
   app.use(express.json());
   app.use(cookieParser());
@@ -41,6 +48,19 @@ export function createApp() {
   app.use("/api/interview-scores", interviewScoreRoutes);
   app.use("/api/candidate-status", candidateStatusRoutes);
   app.use("/api/reports", reportRoutes);
+
+  // Serves the built client from the same origin as the API in production,
+  // so there's no cross-origin cookie to get right and only one service to
+  // deploy. In local dev this directory doesn't exist (the client runs
+  // separately via `vite dev`), so this is a no-op there.
+  const clientDist = path.join(__dirname, "../../client/dist");
+  if (fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+    // Anything not already matched by an /api route or a static asset above
+    // is a client-side route (React Router) — serve index.html and let the
+    // client handle it, so a hard refresh on e.g. /drives/:id doesn't 404.
+    app.get("*", (_req, res) => res.sendFile(path.join(clientDist, "index.html")));
+  }
 
   app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     console.error(err);
