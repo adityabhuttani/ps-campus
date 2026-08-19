@@ -4,7 +4,6 @@ dist
 .env.local
 *.log
 .DS_Store
-server/uploads
 
 # Unrelated scratch content from other tasks in this working directory —
 # not part of the app.

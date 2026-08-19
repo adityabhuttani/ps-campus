@@ -7,6 +7,7 @@ import { prisma } from "../lib/prisma";
 import { AuthedRequest, requireAuth, requireRole } from "../middleware/auth";
 import { roleAtLeast } from "../lib/auth";
 import { uploadPdf } from "../lib/uploads";
+import { getSignedDocumentUrl, uploadDocument, DocumentKind } from "../lib/storage";
 import { driveWriteBlockedFor } from "../lib/driveLock";
 import { weightedScore } from "./interviewScores";
 
@@ -159,20 +160,37 @@ router.patch("/:id", async (req: AuthedRequest, res) => {
 
 router.post("/:id/cv", requireRole(UserRole.CAPTAIN), uploadPdf.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "A PDF file is required" });
+  await uploadDocument(req.params.id, "cv", req.file.buffer);
   const candidate = await prisma.candidate.update({
     where: { id: req.params.id },
-    data: { cvUrl: `/uploads/${req.file.filename}` },
+    data: { cvUrl: `/api/candidates/${req.params.id}/documents/cv` },
   });
   res.json(candidate);
 });
 
 router.post("/:id/assessment-report", requireRole(UserRole.CAPTAIN), uploadPdf.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "A PDF file is required" });
+  await uploadDocument(req.params.id, "assessment-report", req.file.buffer);
   const candidate = await prisma.candidate.update({
     where: { id: req.params.id },
-    data: { assessmentReportUrl: `/uploads/${req.file.filename}` },
+    data: { assessmentReportUrl: `/api/candidates/${req.params.id}/documents/assessment-report` },
   });
   res.json(candidate);
+});
+
+// Storage bucket is private — every view mints a fresh short-lived signed URL
+// rather than relying on a permanent link. requireAuth (already applied to
+// this whole router) is the only gate, matching the previous static-file
+// route's baseline of "any logged-in user with the link" — a real
+// improvement over that route's actual previous behavior of no auth check
+// at all.
+router.get("/:id/documents/:kind", async (req, res) => {
+  const kind = req.params.kind as DocumentKind;
+  if (kind !== "cv" && kind !== "assessment-report") return res.status(404).json({ error: "Not found" });
+
+  const url = await getSignedDocumentUrl(req.params.id, kind);
+  if (!url) return res.status(404).json({ error: "Document not found" });
+  res.redirect(url);
 });
 
 // Cascades to this candidate's interview scores and final status.

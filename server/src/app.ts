@@ -19,20 +19,14 @@ import candidateRoutes from "./routes/candidates";
 import interviewScoreRoutes from "./routes/interviewScores";
 import candidateStatusRoutes from "./routes/candidateStatus";
 import reportRoutes from "./routes/reports";
-import { UPLOAD_DIR, ensureUploadDir } from "./lib/uploads";
 
 export function createApp() {
-  ensureUploadDir();
   const app = express();
   const clientOrigin = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
 
   app.use(cors({ origin: clientOrigin, credentials: true }));
   app.use(express.json());
   app.use(cookieParser());
-  // Candidate CVs and assessment report PDFs — served directly by filename;
-  // access control lives at the API level (only authed staff reach the pages
-  // that link to these), not on the static file route itself.
-  app.use("/uploads", express.static(UPLOAD_DIR));
 
   app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
